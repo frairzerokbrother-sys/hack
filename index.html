@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CyberSecGPT</title>
+<style>
+body{font-family:sans-serif;margin:0;background:#101318;color:#eee}
+header{padding:18px;font-size:22px;font-weight:700;background:#171b22}
+#chat{padding:16px;min-height:70vh}
+.msg{padding:12px;margin:10px 0;border-radius:12px;white-space:pre-wrap}
+.user{background:#263b68;margin-left:20%}
+.ai{background:#20252d;margin-right:10%}
+footer{position:fixed;bottom:0;left:0;right:0;background:#171b22;padding:10px;display:flex;gap:8px}
+input{flex:1;padding:13px;border-radius:10px;border:1px solid #444;background:#0d0f13;color:#fff}
+button{padding:12px 16px;border:0;border-radius:10px}
+small{opacity:.7}
+</style>
+</head>
+<body>
+<header>CyberSecGPT <small>• Offline Lab Assistant</small></header>
+<div id="chat"><div class="msg ai">नमस्ते! मैं CyberSecGPT का offline prototype हूँ।
+मैं OSI, networking, Linux, Android security, secure coding, defensive security और authorized lab testing concepts में मदद कर सकता हूँ।
+
+उदाहरण: "OSI model समझाओ" या "मेरे lab tool की verification checklist बनाओ।"</div></div>
+<footer>
+<input id="q" placeholder="अपना cybersecurity सवाल लिखें…">
+<button onclick="send()">Send</button>
+</footer>
+<script>
+const chat=document.getElementById('chat');
+function add(text,cls){const d=document.createElement('div');d.className='msg '+cls;d.textContent=text;chat.appendChild(d);window.scrollTo(0,document.body.scrollHeight);}
+function answer(q){
+ const x=q.toLowerCase();
+ if(x.includes('osi')) return 'OSI की 7 layers: Physical, Data Link, Network, Transport, Session, Presentation, Application.';
+ if(x.includes('verify')||x.includes('test')) return 'Verification flow: requirement → static checks → unit/integration tests → sandbox → authorized lab validation → regression test → deployment report.';
+ if(x.includes('offline')) return 'Offline mode local knowledge और local tools पर काम करता है। Internet न होने पर live threat intelligence उपलब्ध नहीं होगी।';
+ if(x.includes('android')) return 'Android security में permissions, app signing, sandboxing, IPC, network security और secure storage जैसे topics देखे जा सकते हैं।';
+ if(x.includes('linux')||x.includes('kali')) return 'Linux/Kali lab में पहले environment, dependencies, architecture और authorized scope verify करें; फिर sandboxed testing करें।';
+ return 'यह offline prototype सीमित local knowledge देता है। आगे local LLM/RAG जोड़कर इसे वास्तविक chatbot बनाया जा सकता है। Unauthorized third-party access के लिए इसका उपयोग नहीं किया जाता।';
+}
+function send(){
+ const q=document.getElementById('q'); const v=q.value.trim(); if(!v)return;
+ add(v,'user'); q.value=''; setTimeout(()=>add(answer(v),'ai'),120);
+}
+document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')send()});
+</script>
+</body>
+</html>
